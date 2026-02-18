@@ -107,7 +107,7 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
 
   if (mode === "welcome") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
+      <div className="min-h-screen tartan-bg flex items-center justify-center p-4">
         <div className="w-full max-w-sm text-center">
           {/* Tartan pattern accent */}
           <div className="mb-8">

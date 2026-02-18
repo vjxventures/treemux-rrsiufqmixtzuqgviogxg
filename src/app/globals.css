@@ -124,3 +124,53 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Tartan plaid background pattern for auth screens */
+.tartan-bg {
+  background-color: #fafafa;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 35px,
+      rgba(190, 30, 45, 0.04) 35px,
+      rgba(190, 30, 45, 0.04) 70px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 35px,
+      rgba(190, 30, 45, 0.04) 35px,
+      rgba(190, 30, 45, 0.04) 70px
+    );
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Card swipe animation */
+@keyframes cardEntry {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.card-enter {
+  animation: cardEntry 0.3s ease-out;
+}
