@@ -15,6 +15,7 @@ import { MatchList } from "@/components/match-list";
 import { ChatView } from "@/components/chat-view";
 import { ProfileView } from "@/components/profile-view";
 import { MatchPopup } from "@/components/match-popup";
+import { Onboarding } from "@/components/onboarding";
 import { useAppStore } from "@/lib/store";
 import type { SwipeDirection, Match } from "@/lib/types";
 
@@ -22,10 +23,15 @@ type Tab = "discover" | "matches" | "profile";
 
 export function ScottyApp() {
   const store = useAppStore();
+  const [showOnboarding, setShowOnboarding] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>("discover");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [newMatch, setNewMatch] = useState<Match | null>(null);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
+
+  if (showOnboarding) {
+    return <Onboarding onComplete={() => setShowOnboarding(false)} />;
+  }
 
   const handleSwipe = useCallback(
     (direction: SwipeDirection) => {
