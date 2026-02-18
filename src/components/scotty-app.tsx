@@ -9,6 +9,7 @@ import {
   Heart,
   BookOpen,
   Sparkles,
+  Zap,
 } from "lucide-react";
 import { SwipeCard, SwipeButtons } from "@/components/swipe-card";
 import { MatchList } from "@/components/match-list";
@@ -16,10 +17,11 @@ import { ChatView } from "@/components/chat-view";
 import { ProfileView } from "@/components/profile-view";
 import { MatchPopup } from "@/components/match-popup";
 import { Onboarding } from "@/components/onboarding";
+import { TartanCrush } from "@/components/tartan-crush";
 import { useAppStore } from "@/lib/store";
 import type { SwipeDirection, Match } from "@/lib/types";
 
-type Tab = "discover" | "matches" | "profile";
+type Tab = "discover" | "crush" | "matches" | "profile";
 
 export function ScottyApp() {
   const store = useAppStore();
@@ -42,7 +44,6 @@ export function ScottyApp() {
       if (match) {
         setNewMatch(match);
       }
-      // Move to next card
       setTimeout(() => {
         setCurrentIndex((i) => i + 1);
       }, 300);
@@ -52,7 +53,6 @@ export function ScottyApp() {
 
   const totalUnread = store.matches.reduce((sum, m) => sum + m.unread, 0);
 
-  // Active chat view
   const activeChatMatch = activeChatId
     ? store.matches.find((m) => m.id === activeChatId)
     : null;
@@ -76,7 +76,6 @@ export function ScottyApp() {
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Match popup */}
       {newMatch && (
         <MatchPopup
           profile={store.getProfile(newMatch.profileId) || null}
@@ -89,7 +88,6 @@ export function ScottyApp() {
         />
       )}
 
-      {/* Header */}
       <header className="bg-white border-b border-gray-100 px-5 py-3 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center">
@@ -100,7 +98,6 @@ export function ScottyApp() {
           </h1>
         </div>
 
-        {/* Mode toggle - only show on discover */}
         {activeTab === "discover" && (
           <div className="flex bg-gray-100 rounded-full p-1">
             <button
@@ -134,6 +131,9 @@ export function ScottyApp() {
           </div>
         )}
 
+        {activeTab === "crush" && (
+          <h2 className="text-sm font-semibold text-amber-500">Tartan Crush</h2>
+        )}
         {activeTab === "matches" && (
           <h2 className="text-sm font-semibold text-gray-500">Messages</h2>
         )}
@@ -142,7 +142,6 @@ export function ScottyApp() {
         )}
       </header>
 
-      {/* Main content */}
       <main className="flex-1 overflow-hidden relative">
         <AnimatePresence mode="wait">
           {activeTab === "discover" && (
@@ -153,26 +152,18 @@ export function ScottyApp() {
               exit={{ opacity: 0 }}
               className="h-full flex flex-col px-5 py-4"
             >
-              {/* Card stack */}
               <div className="relative flex-1 max-h-[520px]">
                 {store.availableProfiles.length > 0 &&
                 currentIndex < store.availableProfiles.length ? (
                   <>
-                    {/* Background card */}
                     {currentIndex + 1 < store.availableProfiles.length && (
                       <SwipeCard
-                        key={
-                          store.availableProfiles[currentIndex + 1].id +
-                          "-bg"
-                        }
-                        profile={
-                          store.availableProfiles[currentIndex + 1]
-                        }
+                        key={store.availableProfiles[currentIndex + 1].id + "-bg"}
+                        profile={store.availableProfiles[currentIndex + 1]}
                         onSwipe={() => {}}
                         isTop={false}
                       />
                     )}
-                    {/* Top card */}
                     <SwipeCard
                       key={store.availableProfiles[currentIndex].id}
                       profile={store.availableProfiles[currentIndex]}
@@ -199,10 +190,24 @@ export function ScottyApp() {
                 )}
               </div>
 
-              {/* Swipe buttons */}
               <SwipeButtons
                 onSwipe={handleSwipe}
                 disabled={currentIndex >= store.availableProfiles.length}
+              />
+            </motion.div>
+          )}
+
+          {activeTab === "crush" && (
+            <motion.div
+              key="crush"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="h-full"
+            >
+              <TartanCrush
+                profiles={store.profiles}
+                getProfile={store.getProfile}
               />
             </motion.div>
           )}
@@ -243,39 +248,51 @@ export function ScottyApp() {
         </AnimatePresence>
       </main>
 
-      {/* Bottom nav */}
       <nav className="bg-white border-t border-gray-100 flex items-center justify-around py-2 flex-shrink-0">
         <button
           onClick={() => setActiveTab("discover")}
-          className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors ${
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors ${
             activeTab === "discover"
               ? "text-rose-500"
               : "text-gray-400 hover:text-gray-600"
           }`}
         >
           <Flame
-            className={`w-6 h-6 ${
-              activeTab === "discover" ? "fill-rose-500" : ""
-            }`}
+            className={`w-6 h-6 ${activeTab === "discover" ? "fill-rose-500" : ""}`}
           />
           <span className="text-[10px] font-semibold">Discover</span>
         </button>
 
         <button
+          onClick={() => setActiveTab("crush")}
+          className={`relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors ${
+            activeTab === "crush"
+              ? "text-amber-500"
+              : "text-gray-400 hover:text-gray-600"
+          }`}
+        >
+          <Zap
+            className={`w-6 h-6 ${activeTab === "crush" ? "fill-amber-500" : ""}`}
+          />
+          <span className="absolute -top-0.5 right-1 w-4 h-4 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+            2
+          </span>
+          <span className="text-[10px] font-semibold">Crush</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab("matches")}
-          className={`relative flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors ${
+          className={`relative flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors ${
             activeTab === "matches"
               ? "text-rose-500"
               : "text-gray-400 hover:text-gray-600"
           }`}
         >
           <MessageCircle
-            className={`w-6 h-6 ${
-              activeTab === "matches" ? "fill-rose-500" : ""
-            }`}
+            className={`w-6 h-6 ${activeTab === "matches" ? "fill-rose-500" : ""}`}
           />
           {totalUnread > 0 && (
-            <span className="absolute -top-0.5 right-2 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute -top-0.5 right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
               {totalUnread}
             </span>
           )}
@@ -284,16 +301,14 @@ export function ScottyApp() {
 
         <button
           onClick={() => setActiveTab("profile")}
-          className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors ${
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-colors ${
             activeTab === "profile"
               ? "text-rose-500"
               : "text-gray-400 hover:text-gray-600"
           }`}
         >
           <User
-            className={`w-6 h-6 ${
-              activeTab === "profile" ? "fill-rose-500" : ""
-            }`}
+            className={`w-6 h-6 ${activeTab === "profile" ? "fill-rose-500" : ""}`}
           />
           <span className="text-[10px] font-semibold">Profile</span>
         </button>

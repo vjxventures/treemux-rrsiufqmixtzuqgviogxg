@@ -1,6 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import { ScottyApp } from "@/components/scotty-app";
+import { LandingPage } from "@/components/landing-page";
 
 export default function Home() {
+  const [showApp, setShowApp] = useState(false);
+
+  if (!showApp) {
+    return <LandingPage onLaunch={() => setShowApp(true)} />;
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
       {/* Phone frame */}
