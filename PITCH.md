@@ -1,0 +1,3 @@
+# TartanMatch
+
+**The dating app built exclusively for Carnegie Mellon undergrads.** TartanMatch solves the problem every CMU student knows too well: it's hard to meet people outside your major when you're buried in problem sets. Unlike generic dating apps, TartanMatch matches you based on what actually matters on campus — your college, graduation year, shared student orgs, and favorite study spots — with a compatibility algorithm that surfaces the people you're most likely to click with. Swipe through profiles with a satisfying drag-and-drop interface, get notified when it's a mutual match, and start chatting — all gated behind @andrew.cmu.edu emails so you know everyone's legit. It's Tinder, but it speaks CMU.
