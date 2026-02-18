@@ -1,0 +1,2 @@
+I want to create a website to find dates at Carnegie Mellon. Just like a Tinder, but for undegrads.
+Start thinking about what to build then build it. You have full autonomy to execute.
